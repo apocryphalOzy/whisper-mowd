@@ -1,0 +1,35 @@
+# Whisper MOWD Environment Configuration
+
+# Mode Configuration
+ENVIRONMENT=development  # development, testing, production
+STORAGE_MODE=local       # local or aws
+
+# Whisper Configuration
+WHISPER_MODEL_SIZE=base  # tiny, base, small, medium, large
+
+# Summarization Configuration
+SUMMARIZER_TYPE=openai   # openai, custom_llm, none
+MAX_SUMMARY_LENGTH=600   # Maximum tokens in summary
+
+# OpenAI Integration (if using OpenAI summarizer)
+OPENAI_API_KEY=your_openai_api_key_here
+
+# Custom LLM Configuration (if using custom_llm)
+# CUSTOM_LLM_MODEL_PATH=./models/your_model.gguf
+# CUSTOM_LLM_API_URL=http://localhost:8000/v1/completions
+
+# AWS Configuration (if using aws storage mode)
+AWS_ACCESS_KEY_ID=your_aws_access_key
+AWS_SECRET_ACCESS_KEY=your_aws_secret_key
+AWS_REGION=us-west-2
+
+# S3 Configuration
+S3_LECTURE_BUCKET=mowd-whisper-lectures-dev
+S3_TRANSCRIPT_BUCKET=mowd-whisper-transcripts-dev
+
+# DynamoDB Configuration
+DYNAMODB_TABLE=mowd-whisper-metadata-dev
+
+# Processing Configuration
+TEMP_DIR=/tmp/mowd-whisper  # Directory for temporary files
+OUTPUT_DIR=./output         # Default output directory

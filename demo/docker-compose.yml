@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+  whisper-demo:
+    build: .
+    container_name: whisper-mowd-demo
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./uploads:/app/uploads
+      - ./demo.db:/app/demo.db
+    environment:
+      - DEMO_PASSWORD=${DEMO_PASSWORD:-whisper2025}
+      - WHISPER_MODEL=tiny
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # Optional: Nginx reverse proxy with SSL
+  nginx:
+    image: nginx:alpine
+    container_name: whisper-nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./ssl:/etc/nginx/ssl:ro
+    depends_on:
+      - whisper-demo
+    restart: unless-stopped
