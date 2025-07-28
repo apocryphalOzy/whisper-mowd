@@ -189,8 +189,12 @@ model = whisper.load_model(WHISPER_MODEL)
 print("Model loaded successfully!")
 
 class SimpleWhisperHandler(BaseHTTPRequestHandler):
+    def log_message(self, format, *args):
+        """Override to prevent logging issues with encoding"""
+        print(f"[{self.log_date_time_string()}] {format%args}")
     def do_GET(self):
         """Handle GET requests - show upload form"""
+        print(f"[REQUEST] GET {self.path} from {self.client_address[0]}")
         self.send_response(200)
         self.send_header('Content-type', 'text/html')
         self.end_headers()
@@ -212,7 +216,7 @@ class SimpleWhisperHandler(BaseHTTPRequestHandler):
         </div>
         
         <div id="loading" style="display: none;" class="loading">
-            <p>⏳ Processing audio... This may take 30-60 seconds.</p>
+            <p>[Processing] Processing audio... This may take 30-60 seconds.</p>
         </div>
         '''
         
@@ -310,8 +314,8 @@ class SimpleWhisperHandler(BaseHTTPRequestHandler):
 def run_server():
     """Start the HTTP server"""
     server = HTTPServer(('', PORT), SimpleWhisperHandler)
-    print(f"\n🚀 Server running at http://localhost:{PORT}")
-    print("📝 Ready to transcribe audio files!")
+    print(f"\n[READY] Server running at http://localhost:{PORT}")
+    print("[INFO] Ready to transcribe audio files!")
     print("Press Ctrl+C to stop\n")
     
     try:
