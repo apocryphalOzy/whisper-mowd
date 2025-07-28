@@ -16,7 +16,7 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')
 
 # Import modules to test
 from src.storage.local_storage import LocalStorage
-from src.storage.aws_storage import AWSStorage
+from src.storage.secure_aws_storage import SecureAWSStorage as AWSStorage
 
 class TestLocalStorage(unittest.TestCase):
     """Test cases for LocalStorage class"""

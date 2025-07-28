@@ -23,7 +23,7 @@ from src.summarization.base_summarizer import NullSummarizer
 from src.summarization.openai_summarizer import OpenAISummarizer
 from src.summarization.custom_llm import CustomLLMSummarizer
 from src.storage.local_storage import LocalStorage
-from src.storage.aws_storage import AWSStorage
+from src.storage.secure_aws_storage import SecureAWSStorage as AWSStorage
 
 # Setup logging
 logging.basicConfig(
@@ -180,7 +180,7 @@ def process_file(file_path, output_dir=None, model_size=None, summarizer_type=No
         summary_text = None
         if not isinstance(summarizer, NullSummarizer):
             logger.info(f"Generating summary using {summarizer.get_name()}")
-            summary_text = summarizer.summarize(transcript_text)
+            summary_text = summarizer.summarize(transcription)
             
             # Save summary to storage if generated
             if summary_text:

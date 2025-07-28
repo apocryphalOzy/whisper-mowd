@@ -1,0 +1,33 @@
+MANUAL SETUP INSTRUCTIONS
+========================
+
+1. Open Command Prompt (CMD)
+
+2. Copy and paste these commands ONE AT A TIME:
+
+cd C:\Users\jerem\Documents\projects\whisper\demo
+
+..\Scripts\pip.exe install fastapi
+
+..\Scripts\pip.exe install uvicorn
+
+..\Scripts\pip.exe install python-multipart
+
+..\Scripts\pip.exe install jinja2
+
+..\Scripts\pip.exe install faster-whisper
+
+3. After all packages are installed, run:
+
+..\Scripts\python.exe app_demo.py
+
+4. Open your browser to: http://localhost:8000
+
+5. Use password: whisper2025
+
+---
+
+If you get "access denied" errors, try running Command Prompt as Administrator:
+- Right-click on Command Prompt
+- Select "Run as administrator"
+- Then run the commands above

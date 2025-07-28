@@ -1,0 +1,25 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(mkdir:*)",
+      "Bash(rm:*)",
+      "Bash(mv:*)",
+      "Bash(whisper_env:*)",
+      "Bash(pip install:*)",
+      "Bash(python:*)",
+      "Bash(copy whisper-mowdenv-example.txt whisper-mowd.env)",
+      "Bash(cp:*)",
+      "Bash(.setup_env.bat)",
+      "Bash(cmd:*)",
+      "Bash(where python)",
+      "Bash(Scriptspip.exe list)",
+      "Bash(\"C:\\Users\\jerem\\Documents\\projects\\whisper\\Scripts\\pip.exe\" list)",
+      "Bash(Scriptspython.exe whisper-mowdsrccli.py --audio whisper-mowddataaudio20250429_112153_saqt.mp3 --output test_output --summarizer none)",
+      "Bash(....Scriptspython.exe srccli.py --audio dataaudio20250429_112153_saqt.mp3 --output outputtest --summarizer none)",
+      "Bash(\"C:\\Users\\jerem\\Documents\\projects\\whisper\\Scripts\\python.exe\" \"C:\\Users\\jerem\\Documents\\projects\\whisper\\whisper-mowd\\src\\cli.py\" --audio \"C:\\Users\\jerem\\Documents\\projects\\whisper\\whisper-mowd\\data\\audio\\20250429_112153_saqt.mp3\" --output \"C:\\Users\\jerem\\Documents\\projects\\whisper\\test_output\" --summarizer none)",
+      "Bash(Scriptspython.exe test_whisper.py)",
+      "Bash(dir:*)"
+    ],
+    "deny": []
+  }
+}

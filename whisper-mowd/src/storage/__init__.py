@@ -4,6 +4,6 @@ Handles file and metadata storage with local and cloud backends
 """
 
 from .local_storage import LocalStorage
-from .aws_storage import AWSStorage
+from .secure_aws_storage import SecureAWSStorage as AWSStorage
 
 __all__ = ['LocalStorage', 'AWSStorage']
