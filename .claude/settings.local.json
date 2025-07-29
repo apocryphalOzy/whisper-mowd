@@ -24,7 +24,8 @@
       "Bash(winget install:*)",
       "Bash(source:*)",
       "Bash(pip show:*)",
-      "Bash(ls:*)"
+      "Bash(ls:*)",
+      "Bash(powershell:*)"
     ],
     "deny": []
   }
