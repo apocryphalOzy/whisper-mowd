@@ -229,17 +229,17 @@
             <div class="constraints">
                 <h3>Demo Constraints:</h3>
                 <ul>
-                    <li>Maximum file size: 50MB</li>
+                    <li>Maximum file size: 150MB</li>
                     <li>Maximum duration: 5 minutes</li>
                     <li>Daily limit: 10 uploads per IP</li>
                     <li>Files deleted after 24 hours</li>
-                    <li>Supported formats: MP3, WAV, M4A, MP4, OGG, FLAC</li>
+                    <li>Supported formats: 45 total including MP3, WAV, MKV, MP4, AVI, MOV, and more</li>
                 </ul>
             </div>
 
             <div class="form-group">
                 <label for="audioFile">Select Audio File:</label>
-                <input type="file" id="audioFile" accept=".mp3,.wav,.m4a,.mp4,.ogg,.flac" onchange="fileSelected()">
+                <input type="file" id="audioFile" accept=".mp3,.wav,.m4a,.ogg,.flac,.opus,.amr,.ac3,.dts,.ape,.wv,.tak,.tta,.aiff,.au,.ra,.mka,.m4b,.spx,.aac,.wma,.mp4,.mkv,.avi,.mov,.flv,.webm,.wmv,.mpg,.mpeg,.3gp,.3g2,.m4v,.f4v,.f4p,.ogv,.asf,.rm,.rmvb,.vob,.ts,.mts,.m2ts,.divx,.xvid" onchange="fileSelected()">
                 <div id="fileInfo" class="file-info hidden"></div>
             </div>
 
@@ -256,10 +256,22 @@
         <!-- Results Section -->
         <div id="resultSection" class="result-section hidden">
             <h2>Transcription Result</h2>
+            <div style="margin-bottom: 15px;">
+                <label style="display: inline-block; margin-right: 20px;">
+                    <input type="radio" name="viewMode" value="plain" checked onchange="toggleView()">
+                    Plain Text
+                </label>
+                <label style="display: inline-block;">
+                    <input type="radio" name="viewMode" value="timestamped" onchange="toggleView()">
+                    With Timestamps
+                </label>
+            </div>
             <div id="resultText" class="result-text"></div>
+            <div id="timestampedText" class="result-text hidden" style="font-family: monospace;"></div>
             <div class="result-actions">
                 <button onclick="copyToClipboard()">Copy Text</button>
                 <button onclick="downloadText()">Download</button>
+                <button onclick="summarizeWithGPT()" style="background: #27ae60;">Summarize with GPT</button>
                 <button onclick="reset()">New Transcription</button>
             </div>
             <div id="processingInfo" style="margin-top: 15px; font-size: 14px; color: #666;"></div>
@@ -273,6 +285,8 @@
     <script>
         let currentJobId = null;
         let pollInterval = null;
+        let currentPlainText = '';
+        let currentTimestampedText = '';
 
         // Check if already authenticated
         window.onload = function() {
@@ -314,8 +328,8 @@
                 fileInfo.innerHTML = `<strong>File:</strong> ${file.name} (${sizeMB} MB)`;
                 fileInfo.classList.remove('hidden');
                 
-                if (file.size > 50 * 1024 * 1024) {
-                    fileInfo.innerHTML += '<br><span style="color: red;">File too large! Max 50MB</span>';
+                if (file.size > 150 * 1024 * 1024) {
+                    fileInfo.innerHTML += '<br><span style="color: red;">File too large! Max 150MB</span>';
                     uploadBtn.disabled = true;
                 } else {
                     uploadBtn.disabled = false;
@@ -390,7 +404,7 @@
                 const data = await response.json();
 
                 if (response.ok) {
-                    showResult(data.text, data.processing_time);
+                    showResult(data.text, data.timestamped_text, data.processing_time);
                 } else {
                     throw new Error(data.detail || 'Failed to get result');
                 }
@@ -411,9 +425,13 @@
             document.getElementById('statusMessage').className = 'status-message error';
         }
 
-        function showResult(text, processingTime) {
+        function showResult(text, timestampedText, processingTime) {
+            currentPlainText = text;
+            currentTimestampedText = timestampedText || text;
+            
             document.getElementById('resultSection').classList.remove('hidden');
             document.getElementById('resultText').textContent = text;
+            document.getElementById('timestampedText').textContent = timestampedText || text;
             
             if (processingTime) {
                 document.getElementById('processingInfo').innerHTML = 
@@ -425,20 +443,53 @@
             document.getElementById('statusMessage').className = 'status-message success';
         }
 
+        function toggleView() {
+            const viewMode = document.querySelector('input[name="viewMode"]:checked').value;
+            if (viewMode === 'plain') {
+                document.getElementById('resultText').classList.remove('hidden');
+                document.getElementById('timestampedText').classList.add('hidden');
+            } else {
+                document.getElementById('resultText').classList.add('hidden');
+                document.getElementById('timestampedText').classList.remove('hidden');
+            }
+        }
+
         function copyToClipboard() {
-            const text = document.getElementById('resultText').textContent;
+            const viewMode = document.querySelector('input[name="viewMode"]:checked').value;
+            const text = viewMode === 'plain' ? currentPlainText : currentTimestampedText;
             navigator.clipboard.writeText(text).then(() => {
                 alert('Text copied to clipboard!');
             });
         }
+        
+        function summarizeWithGPT() {
+            const text = currentPlainText;
+            const prompt = "Please summarize the following transcript into key points:\n\n";
+            const fullText = prompt + text;
+            
+            // Truncate if too long for URL (browsers typically support ~2000 chars in URL)
+            const maxLength = 1500;
+            const truncatedText = fullText.length > maxLength 
+                ? fullText.substring(0, maxLength) + "...[truncated]" 
+                : fullText;
+            
+            // Open ChatGPT in new tab with the text
+            const chatGPTUrl = `https://chat.openai.com/?q=${encodeURIComponent(truncatedText)}`;
+            window.open(chatGPTUrl, '_blank');
+        }
 
         function downloadText() {
-            const text = document.getElementById('resultText').textContent;
+            const viewMode = document.querySelector('input[name="viewMode"]:checked').value;
+            const text = viewMode === 'plain' ? currentPlainText : currentTimestampedText;
+            const filename = viewMode === 'plain' 
+                ? `transcription_${currentJobId}.txt`
+                : `transcription_${currentJobId}_timestamped.txt`;
+            
             const blob = new Blob([text], {type: 'text/plain'});
             const url = window.URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = `transcription_${currentJobId}.txt`;
+            a.download = filename;
             a.click();
             window.URL.revokeObjectURL(url);
         }

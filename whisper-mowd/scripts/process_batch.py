@@ -39,8 +39,12 @@ def find_audio_files(directory, recursive=False):
     directory = Path(directory)
     
     # Define supported extensions
-    AUDIO_EXTENSIONS = ['.mp3', '.wav', '.m4a', '.ogg', '.flac']
-    VIDEO_EXTENSIONS = ['.mp4', '.mkv', '.avi', '.mov', '.flv', '.webm']
+    AUDIO_EXTENSIONS = ['.mp3', '.wav', '.m4a', '.ogg', '.flac', '.opus', '.amr', '.ac3', '.dts', 
+                       '.ape', '.wv', '.tak', '.tta', '.aiff', '.au', '.ra', '.mka', '.m4b', '.spx',
+                       '.aac', '.wma']
+    VIDEO_EXTENSIONS = ['.mp4', '.mkv', '.avi', '.mov', '.flv', '.webm', '.wmv', '.mpg', '.mpeg', 
+                       '.3gp', '.3g2', '.m4v', '.f4v', '.f4p', '.ogv', '.asf', '.rm', '.rmvb', 
+                       '.vob', '.ts', '.mts', '.m2ts', '.divx', '.xvid']
     SUPPORTED_EXTENSIONS = AUDIO_EXTENSIONS + VIDEO_EXTENSIONS
     
     # Find files

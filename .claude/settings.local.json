@@ -25,7 +25,8 @@
       "Bash(source:*)",
       "Bash(pip show:*)",
       "Bash(ls:*)",
-      "Bash(powershell:*)"
+      "Bash(powershell:*)",
+      "Bash(python:*)"
     ],
     "deny": []
   }

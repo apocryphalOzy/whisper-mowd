@@ -23,8 +23,11 @@ class AudioFileConverter:
     """
     
     # List of extensions that may need conversion
-    VIDEO_EXTENSIONS = ['.mp4', '.mkv', '.avi', '.mov', '.flv', '.webm']
-    UNCOMMON_AUDIO = ['.m4a', '.aac', '.wma', '.ogg', '.flac']
+    VIDEO_EXTENSIONS = ['.mp4', '.mkv', '.avi', '.mov', '.flv', '.webm', '.wmv', '.mpg', '.mpeg', 
+                       '.3gp', '.3g2', '.m4v', '.f4v', '.f4p', '.ogv', '.asf', '.rm', '.rmvb', 
+                       '.vob', '.ts', '.mts', '.m2ts', '.divx', '.xvid']
+    UNCOMMON_AUDIO = ['.m4a', '.aac', '.wma', '.ogg', '.flac', '.opus', '.amr', '.ac3', '.dts', 
+                      '.ape', '.wv', '.tak', '.tta', '.aiff', '.au', '.ra', '.mka', '.m4b', '.spx']
     WHISPER_COMPATIBLE = ['.mp3', '.wav']
     
     def __init__(self, default_output_format="mp3", temp_dir=None):
